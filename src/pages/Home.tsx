@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
-import { Search, ChevronLeft, ChevronRight, User } from "lucide-react"
+import { Search, ChevronLeft, ChevronRight } from "lucide-react"
 
 const sampleTeachers = [
   { name: "Jane Smith", class: "3B", type: "permanent" },
@@ -14,12 +14,18 @@ const sampleTeachers = [
   { name: "Michael Brown", class: "Casual", type: "casual" },
 ]
 
-export default function Page() {
-  const [selectedDates, setSelectedDates] = useState([new Date()])
+interface Teacher {
+  name: string;
+  class: string;
+  type: string;
+}
+
+export default function Home() {
+  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date()])
   const [teacherSearch, setTeacherSearch] = useState("")
-  const [filteredTeachers, setFilteredTeachers] = useState([])
+  const [filteredTeachers, setFilteredTeachers] = useState<Teacher[]>([])
   const [teacherResultsOpen, setTeacherResultsOpen] = useState(false)
-  const [selectedTeacher, setSelectedTeacher] = useState(null)
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null)
 
   useEffect(() => {
     if (teacherSearch.length > 1) {
@@ -34,7 +40,7 @@ export default function Page() {
     }
   }, [teacherSearch])
 
-  function selectTeacher(t) {
+  function selectTeacher(t: Teacher) {
     setSelectedTeacher(t)
     setTeacherResultsOpen(false)
   }
@@ -61,14 +67,14 @@ export default function Page() {
 
         {/* Teacher Search */}
         <Card>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-6">
             <h2 className="font-semibold text-xl">1. Search for Absent Teacher</h2>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
                 <Input
                   placeholder="Type teacher name..."
                   value={teacherSearch}
-                  onChange={(e) => setTeacherSearch(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeacherSearch(e.target.value)}
                   onFocus={() => teacherSearch.length > 1 && setTeacherResultsOpen(true)}
                 />
                 <div className="absolute right-3 top-2.5 text-gray-400 pointer-events-none">
@@ -106,7 +112,7 @@ export default function Page() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 w-auto">
-                      <Calendar mode="single" selected={selectedDates} onSelect={setSelectedDates} />
+                      <Calendar mode="single" selected={selectedDates[0]} onSelect={(date: Date | undefined) => date && setSelectedDates([date])} />
                     </PopoverContent>
                   </Popover>
                   <Button variant="ghost" size="icon" onClick={nextDay}>
@@ -121,7 +127,7 @@ export default function Page() {
         {/* Selected Teacher */}
         {selectedTeacher && (
           <Card>
-            <CardContent>
+            <CardContent className="p-6">
               <h3 className="text-lg font-medium">
                 {selectedTeacher.name} - {selectedTeacher.class} (Absent)
               </h3>

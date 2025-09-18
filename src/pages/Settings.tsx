@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+interface Teacher {
+  name: string;
+  class: string;
+}
 
 export default function SettingsPage() {
   const [teacherName, setTeacherName] = useState('');
   const [className, setClassName] = useState('');
-  const [teachers, setTeachers] = useState([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
 
   function addTeacher() {
     if (teacherName && className) {
@@ -33,18 +38,18 @@ export default function SettingsPage() {
 
           <TabsContent value="teachers">
             <Card className="mb-6">
-              <CardContent>
+              <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Add Teacher</h2>
                 <div className="flex flex-col md:flex-row gap-4 mb-4">
                   <Input
                     placeholder="Teacher Name"
                     value={teacherName}
-                    onChange={(e) => setTeacherName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeacherName(e.target.value)}
                   />
                   <Input
                     placeholder="Class Name"
                     value={className}
-                    onChange={(e) => setClassName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setClassName(e.target.value)}
                   />
                   <Button onClick={addTeacher} className="bg-primary text-white">Add</Button>
                 </div>
@@ -61,7 +66,7 @@ export default function SettingsPage() {
 
           <TabsContent value="timetable">
             <Card>
-              <CardContent>
+              <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Timetable Management</h2>
                 <p className="text-gray-500">Placeholder for uploading and managing timetable data.</p>
               </CardContent>
